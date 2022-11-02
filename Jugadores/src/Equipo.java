@@ -6,7 +6,7 @@ public class Equipo {
 private List<Jugador> listaJugadores;
 
 public Equipo() {
-   listaJugadores = new ArrayList<>();
+   listaJugadores = new ArrayList<>(); //inicializo la lista
 }
 
 public void addJugador (Jugador j) {
