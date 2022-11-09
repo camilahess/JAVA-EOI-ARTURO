@@ -11,6 +11,7 @@ import java.util.Scanner;
 
 public class App {
 
+    //EJERCICIOS 1,2 3, BASE DE DATOS EOI2
     public final static String CADENA_CONEXION = "jdbc:mariadb://localhost:3306/eoi2";
     public final static String USER = "root";
     public final static String PASS = ""; 
@@ -74,6 +75,7 @@ public class App {
         try (Connection conn = DriverManager.getConnection(CADENA_CONEXION, USER, PASS)) {
             Statement st = conn.createStatement();
             ResultSet rs = st.executeQuery("SELECT * FROM departamentos");
+
             while (rs.next()) {
                 int num = rs.getInt("deptno");
                 String nombre = rs.getString("nombre");
@@ -85,16 +87,41 @@ public class App {
     }
 
     public static boolean insertDepartamento(int num, String nombre) {
-        return false;
+        try (Connection conn = DriverManager.getConnection(CADENA_CONEXION, USER, PASS)) {
+          PreparedStatement st = conn.prepareStatement("INSERT INTO departamentos VALUES (?, ? )");
+            st.setInt(1, num);
+            st.setString(2, nombre);
+            int filas = st.executeUpdate();
+          return filas > 0;
+        } catch (SQLException ex) {
+            System.err.println(ex.getMessage());
+            return false;
+        }
+       
     }
 
 
+    public static boolean deleteDepartamento(int num ) {
+        try (Connection conn = DriverManager.getConnection(CADENA_CONEXION, USER, PASS)) {
+          PreparedStatement st = conn.prepareStatement("DELETE FROM departamentos WHERE deptno = ? ");
+          st.setInt(1, num);
+          int filas = st.executeUpdate();
+            return filas > 0 ;
+        } catch (SQLException ex) {
+            System.err.println(ex.getMessage());
+            return false;
+        }
+       
+    }
     
     public static void main( String[] args )  {
         //ejercicio1();
         //ejercicio2();
 
         //ejercicio  3
+        System.out.println("Listado de departamentos: " );
+        ejercicio3();
+        System.out.println("--------NUEVO DEPARTAMENTO-------");
         Scanner sc = new Scanner(System.in);
         System.out.print("Número de departamento: ");
         int num = Integer.parseInt(sc.nextLine());
@@ -102,6 +129,14 @@ public class App {
         String nombre = sc.nextLine();
         // apartado1();
         insertDepartamento(num, nombre);
+        System.out.println("Departamento insertado correctamente...");
+        ejercicio3();
+        System.out.println("A continuación voy a borrar el departamento creado, presione enter para continuar...");
+        sc.nextLine();
+        
+
+        deleteDepartamento(num);
+        System.out.println("Departamento borrado....");
         ejercicio3();
         
 
