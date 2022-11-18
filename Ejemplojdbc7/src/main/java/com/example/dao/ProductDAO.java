@@ -10,6 +10,7 @@ public interface ProductDAO {
 
     Product insert (Product p);
     
+    boolean delete(int idProd);
 
 
 }

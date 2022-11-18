@@ -76,13 +76,11 @@ public class App {
         System.out.println("Categoría borrada correctamente");
 
 
-
-
     }
 
     public static void mostrarProductos(){
         mostrarCategorias();
-        System.out.print("Elige una categoría: ");
+        System.out.print("Elige una categoría(id): ");
         int idCat = Integer.parseInt(System.console().readLine());
 
         List<Product> prods = prodDao.findByCategory(idCat);
@@ -94,8 +92,29 @@ public class App {
         // Mostrar y seleccionar categoría
         // Pedir resto de datos (reference, name, price)
         // Mostrar producto añadido
+
+        System.out.print("Referencia: ");
+        String reference = System.console().readLine();
+        System.out.print("Nombre: ");
+        String name = System.console().readLine();
+        System.out.print("Precio: ");
+        Double price = Double.parseDouble(System.console().readLine());
+        System.out.print("Id Categoría: ");
+        int category = Integer.parseInt(System.console().readLine());
+
+        Product p = new Product(0, reference, name, price, category);
+        Product insertedProduct = prodDao.insert(p);
+        System.out.println("Categoría insertada: " + insertedProduct);
+
+
     }
 
+    public static void borrarProducto() {
+        mostrarProductos();
+        System.out.print("Producto a borrar: ");
+        int idProd = Integer.parseInt(System.console().readLine());
+        prodDao.delete(idProd);
+    }
 
     public static void showMenu() {
         int opcion;
@@ -106,6 +125,8 @@ public class App {
         System.out.println("3.Modificar categoría");
         System.out.println("4.Borrar categoría");
         System.out.println("5.Mostrar productos de una categoría");
+        System.out.println("6.Añadir producto");
+        System.out.println("7. Borrar producto");
         System.out.println("0.Salir");
 
         System.out.println("Elige una opción: ");
@@ -122,6 +143,8 @@ public class App {
             case 3  -> actualizaCategoria();
             case 4  -> borraCategoria();
             case 5  -> mostrarProductos();
+            case 6  -> insertarProducto();
+            case 7  -> borrarProducto();
 
 
         }

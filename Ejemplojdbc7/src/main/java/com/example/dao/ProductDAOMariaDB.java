@@ -1,9 +1,11 @@
 package com.example.dao;
 
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,8 +42,38 @@ public class ProductDAOMariaDB implements ProductDAO {
 
     @Override
     public Product insert(Product p) {
-        
-        return null;
+        try(Connection conn = pcon.getConnection()) {
+            PreparedStatement stProd = conn.prepareStatement("INSERT INTO product (reference, name, price, category) VALUES (?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+            stProd.setString(1, p.getReference() );
+            stProd.setString(2, p.getName());
+            stProd.setDouble(3, p.getPrice());
+            stProd.setInt(4, p.getCategory());
+            stProd.executeUpdate();
+            ResultSet rs = stProd.getGeneratedKeys();
+            rs.first();
+            p = new Product(rs.getInt("id"), rs.getString("reference"), rs.getString("name"), rs.getDouble("price"), rs.getInt("category"));
+
+        } catch(SQLException e) {
+            System.err.println(e.getMessage());
+        }
+        return p;
+  
+            
+       
     }
-    
+
+    @Override
+    public boolean delete(int idProd) {
+        boolean borrado = false;
+        try (Connection conn = pcon.getConnection()) {
+            PreparedStatement st = conn.prepareStatement("DELETE FROM product WHERE id = ?");
+            st.setInt(1, idProd);
+            int filas = st.executeUpdate();
+            borrado = filas > 0;
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
+
+        return borrado;
+    }
 }

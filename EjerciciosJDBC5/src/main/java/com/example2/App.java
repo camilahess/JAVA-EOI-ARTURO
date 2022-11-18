@@ -9,7 +9,7 @@ import java.sql.Statement;
 import java.util.Scanner;
 
 /**
- * EJERCICIO 5 JDBC BASE DE DATOS PRODUC MANAGER
+ * EJERCICIO 5 JDBC BASE DE DATOS PRODUCT MANAGER
  */
 public class App {
     public final static String PRODUCT_MANAGER = "jdbc:mariadb://localhost:3306/product-manager";
